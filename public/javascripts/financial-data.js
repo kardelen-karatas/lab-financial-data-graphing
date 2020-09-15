@@ -1,9 +1,20 @@
 
+const startDate = document.getElementById("start-date")
+const endDate = document.getElementById("end-date")
+
+let startDateValue
+let endDateValue
+let url = "http://api.coindesk.com/v1/bpi/historical/close.json"
+
+endDate.addEventListener('change', (event) => endDateValue = endDate.value);
+startDate.addEventListener('change', (event) => startDateValue = startDate.value);
 
 
-axios.get(`http://api.coindesk.com/v1/bpi/historical/close.json?start=${}&end=${}`)
+if (endDateValue && startDateValue)url = `${url}?start=${startDateValue}&end=${endDateValue}`
+
+axios.get(url)
 .then(responseFromApi => {
-    console.log(responseFromApi.data)
+    //console.log(responseFromApi.data)
     printTheChart(responseFromApi.data)
 
 })
