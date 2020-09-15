@@ -1,3 +1,4 @@
+const input = document.querySelector("input")
 
 const startDate = document.getElementById("start-date")
 const endDate = document.getElementById("end-date")
@@ -6,20 +7,33 @@ let startDateValue
 let endDateValue
 let url = "http://api.coindesk.com/v1/bpi/historical/close.json"
 
-endDate.addEventListener('change', (event) => endDateValue = endDate.value);
-startDate.addEventListener('change', (event) => startDateValue = startDate.value);
+execUrl(url)
 
+endDate.addEventListener('change', (event) => {
+    endDateValue = endDate.value
+    if (endDateValue && startDateValue) {
+        url = `http://api.coindesk.com/v1/bpi/historical/close.json?start=${startDateValue}&end=${endDateValue}`
+    }
+    execUrl(url)
+});
 
-if (endDateValue && startDateValue)url = `${url}?start=${startDateValue}&end=${endDateValue}`
+startDate.addEventListener('change', (event) => {
+    startDateValue = startDate.value
+    if (endDateValue && startDateValue){
+        url = `http://api.coindesk.com/v1/bpi/historical/close.json?start=${startDateValue}&end=${endDateValue}`
+    } 
+    execUrl(url)
+});
 
-axios.get(url)
-.then(responseFromApi => {
-    //console.log(responseFromApi.data)
-    printTheChart(responseFromApi.data)
-
-})
-.catch(error => console.log(error))
-
+function execUrl(url) {
+    console.log("=>", url)
+    axios.get(url)
+    .then(responseFromApi => {
+        //console.log(responseFromApi.data)
+        printTheChart(responseFromApi.data)
+    })
+    .catch(error => console.log(error))
+}
 
 function printTheChart(data) {
     const BPI = data.bpi;
